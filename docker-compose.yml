@@ -1,0 +1,10 @@
+version: '3'
+services:
+  my-profile:
+    image: masterhua/my-profile
+    ports:
+      - "80:80"
+  todoapp:
+    image: todoappimage
+    ports:
+      - "8080:8080"
