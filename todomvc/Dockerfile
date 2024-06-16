@@ -1,23 +1,26 @@
-# Use an official Node.js runtime as a parent image
-FROM node:14
+# 使用官方的 Node.js 镜像作为基础镜像
+FROM node:14-alpine
 
-# Set the working directory
-WORKDIR /usr/src/app
+# 设置工作目录
+WORKDIR /app
 
-# Copy package.json and package-lock.json
+# 复制 package.json 和 package-lock.json
 COPY package*.json ./
 
-# Install dependencies
+# 设置 npm 镜像
+RUN npm config set registry https://registry.npm.taobao.org
+
+# 安装依赖
 RUN npm install
 
-# Copy the rest of the application code
+# 复制应用代码
 COPY . .
 
-# Install serve to serve the build folder
-RUN npm install -g serve
+# 构建应用
+RUN npm run build
 
-# Command to run the application
-CMD ["serve", "-s", "build"]
-
-# Expose port 80
+# 暴露应用运行的端口
 EXPOSE 80
+
+# 启动应用
+CMD ["npm", "start"]
