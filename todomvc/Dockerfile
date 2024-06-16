@@ -14,8 +14,14 @@ COPY package*.json ./
 # 更新 npm 到最新版本
 RUN npm install -g npm@latest
 
-# 安装依赖  
-RUN npm install --no-cache
+# 设置代理，如果需要的话
+#ARG HTTP_PROXY=http://your_proxy:port
+#ARG HTTPS_PROXY=http://your_proxy:port
+#ENV http_proxy=$HTTP_PROXY
+#ENV https_proxy=$HTTPS_PROXY
+
+# 安装依赖，增加详细日志输出
+RUN npm install --no-cache --verbose
 
 # 复制应用代码
 COPY . .
