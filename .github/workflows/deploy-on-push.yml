@@ -29,18 +29,15 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./html
-          file: ./html/Dockerfile
+          file: ./html/Dockerfile  
           push: true
           tags: masterhua/my-profile:latest
 
-      - name: Clone TodoMVC repository
-        run: git clone https://github.com/tastejs/todomvc.git
-
-      - name: Build and push TodoMVC
+      - name: Build and push todo-app
         uses: docker/build-push-action@v4
         with:
           context: ./todomvc
-          file: ./todomvc/Dockerfile
+          file: ./todomvc/Dockerfile  
           push: true
           tags: masterhua/todo-app:latest
 
