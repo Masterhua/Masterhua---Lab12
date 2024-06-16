@@ -3,17 +3,19 @@ FROM node:8.17.0-alpine
 
 # 设置工作目录  
 WORKDIR /app  
-  
-# 设置环境变量，用于配置npm镜像（可选）  
 
+# 设置环境变量，用于配置npm镜像（可选）  
 #ARG NPM_REGISTRY=https://registry.npm.taobao.org  
 #RUN npm config set registry $NPM_REGISTRY  
-  
+
 # 复制 package.json 和 package-lock.json  
 COPY package*.json ./  
-  
+
+# 更新 npm 到最新版本
+RUN npm install -g npm@latest
+
 # 安装依赖  
-RUN npm install  
+RUN npm install --no-cache
 
 # 复制应用代码
 COPY . .
