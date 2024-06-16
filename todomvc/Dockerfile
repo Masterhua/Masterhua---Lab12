@@ -1,12 +1,13 @@
 # 使用官方的 Node.js 镜像作为基础镜像
-FROM node:14-alpine
+FROM node:8.17.0-alpine 
 
 # 设置工作目录  
 WORKDIR /app  
   
 # 设置环境变量，用于配置npm镜像（可选）  
-ARG NPM_REGISTRY=https://registry.npm.taobao.org  
-RUN npm config set registry $NPM_REGISTRY  
+
+#ARG NPM_REGISTRY=https://registry.npm.taobao.org  
+#RUN npm config set registry $NPM_REGISTRY  
   
 # 复制 package.json 和 package-lock.json  
 COPY package*.json ./  
