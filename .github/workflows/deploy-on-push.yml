@@ -1,61 +1,66 @@
 name: Deploy on Push
-on:  
-  push:  
-    branches:  
+
+on:
+  push:
+    branches:
       - main
-jobs:  
-  docker:  
-    runs-on: ubuntu-latest  
-    steps:  
-      - name: Checkout  
-        uses: actions/checkout@v3  
 
-      - name: Set up QEMU  
-        uses: docker/setup-qemu-action@v2  
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
 
-      - name: Set up Docker Buildx  
-        uses: docker/setup-buildx-action@v2 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Login to DockerHub  
-        uses: docker/login-action@v2  
-        with:  
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}  
-          password: ${{ secrets.DOCKER_HUB_TOKEN }}  
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
 
-      - name: Build and push personal website  
-        uses: docker/build-push-action@v4  
-        with:  
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Build and push personal website
+        uses: docker/build-push-action@v4
+        with:
           context: ./html
-          push: true  
+          file: ./html/Dockerfile  
+          push: true
           tags: masterhua/my-profile:latest
 
-      - name: Build and push todo-app  
-        uses: docker/build-push-action@v4  
-        with:  
+      - name: Build and push todo-app
+        uses: docker/build-push-action@v4
+        with:
           context: ./todomvc
-          push: true  
+          file: ./todomvc/Dockerfile  
+          push: true
           tags: masterhua/todo-app:latest
 
-      - name: Copy docker-compose file via SSH  
-        uses: appleboy/scp-action@v0.1.4  
-        with:  
-          host: ${{secrets.HOST_SERVER}}  
-          username: ${{ secrets.HOST_USER_NAME }}  
-          key: ${{ secrets.HOST_SSH_PRIVATE_KEY }}  
-          port: 22  
-          source: "docker-compose.yml"  
-          target: "/home/ubuntu/profile"  
-          
-      - name: Deploy using Docker Compose  
-        uses: appleboy/ssh-action@v0.1.10  
-        with:  
-          host: ${{secrets.HOST_SERVER}}  
-          username: ${{ secrets.HOST_USER_NAME }}  
-          key: ${{ secrets.HOST_SSH_PRIVATE_KEY }}  
-          port: 22  
-          script: |  
-            cd /home/ubuntu/profile  
-            echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin  
-            docker compose down  
-            docker compose pull  
+      - name: Copy docker-compose file via SSH
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST_SERVER }}
+          username: ${{ secrets.HOST_USER_NAME }}
+          key: ${{ secrets.HOST_SSH_PRIVATE_KEY }}
+          port: 22
+          source: "docker-compose.yml"
+          target: "/home/ubuntu/profile"
+
+      - name: Deploy using Docker Compose
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST_SERVER }}
+          username: ${{ secrets.HOST_USER_NAME }}
+          key: ${{ secrets.HOST_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /home/ubuntu/profile
+            echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+            docker compose down
+            docker compose pull
             docker compose up -d
