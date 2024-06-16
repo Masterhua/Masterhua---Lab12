@@ -39,8 +39,8 @@ jobs:
       - name: Build and push TodoMVC
         uses: docker/build-push-action@v4
         with:
-          context: ./todomvc/examples/typescript-react
-          file: ./todomvc/examples/typescript-react/Dockerfile
+          context: ./todomvc
+          file: ./todomvc/Dockerfile
           push: true
           tags: masterhua/todo-app:latest
 
