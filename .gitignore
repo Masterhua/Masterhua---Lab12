@@ -1,5 +1,3 @@
-# 忽略 Node.js 依赖包
-node_modules/
 
 # 忽略所有的密钥文件
 *.pem
