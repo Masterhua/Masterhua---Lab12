@@ -1,10 +1,13 @@
 version: '3'
+
 services:
-  my-profile:
-    image: masterhua/my-profile
+  website:
+    image: masterhua/my-profile:latest
     ports:
-      - "80:80"
-  todoapp:
-    image: todoappimage
+      - "8080:80"
+
+  todo-app:
+    build:
+      context: ./todomvc
     ports:
-      - "8080:8080"
+      - "8081:80"
