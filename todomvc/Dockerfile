@@ -7,8 +7,8 @@ WORKDIR /app
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
-# Replace git protocol with https
-RUN git config --global url."https://".insteadOf git://
+# Set npm registry to use HTTPS
+RUN npm config set registry https://registry.npmjs.org/
 
 # Install dependencies
 RUN npm install
