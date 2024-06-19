@@ -1,11 +1,14 @@
-# Use an official Node.js runtime as a parent image
+# Dockerfile
 FROM node:14
 
-# Set the working directory
-WORKDIR /usr/src/app
+# Set working directory
+WORKDIR /app
 
-# Copy package.json and package-lock.json
+# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
+
+# Replace git protocol with https
+RUN git config --global url."https://".insteadOf git://
 
 # Install dependencies
 RUN npm install
@@ -16,5 +19,5 @@ COPY . .
 # Expose the port the app runs on
 EXPOSE 80
 
-# Define the command to run the application
+# Start the app
 CMD ["npm", "start"]
