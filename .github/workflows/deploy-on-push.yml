@@ -19,7 +19,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '8.17.0'  # 使用与 package.json 中指定的 Node.js 版本
+          node-version: '8.17.0'
+
+      - name: Configure yarn to use HTTP instead of Git
+        run: yarn config set "git-timeout" 60000 && yarn config set "httpTimeout" 300000
 
       - name: Cache Yarn modules
         uses: actions/cache@v2
@@ -31,11 +34,11 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-        working-directory: ./todomvc  # 确保这是 package.json 所在的目录
+        working-directory: ./todomvc
 
       - name: Run build
         run: yarn build
-        working-directory: ./todomvc  # 确保这是 package.json 所在的目录
+        working-directory: ./todomvc
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v1
