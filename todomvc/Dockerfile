@@ -4,9 +4,14 @@ FROM node:14
 # Create app directory
 WORKDIR /usr/src/app
 
-# Install app dependencies
-COPY package*.json ./
-RUN npm install
+# Copy package.json
+COPY package.json ./
+
+# Install yarn globally
+RUN npm install -g yarn
+
+# Install app dependencies using yarn
+RUN yarn install
 
 # Bundle app source
 COPY . .
@@ -15,4 +20,4 @@ COPY . .
 EXPOSE 8081
 
 # Start the app
-CMD ["npm", "start"]
+CMD ["yarn", "start"]
