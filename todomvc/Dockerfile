@@ -1,23 +1,15 @@
-# Dockerfile for todomvc
-FROM node:14
+FROM node:10-alpine as node
 
-# Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Copy package.json
-COPY package.json ./
+COPY package*.json /app/
 
-# Install yarn globally
-RUN npm install -g yarn
+# 安装依赖
+RUN npm install
 
-# Install app dependencies using yarn
-RUN yarn install
-
-# Bundle app source
 COPY . .
 
-# Expose the port the app runs on
 EXPOSE 8081
 
-# Start the app
-CMD ["yarn", "start"]
+# 使用 npm 启动应用程序
+CMD ["npm", "start"]

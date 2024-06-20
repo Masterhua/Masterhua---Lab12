@@ -19,25 +19,22 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '8.17.0'
+          node-version: '10.x'  # 使用 Node.js 10.x
 
-      - name: Configure yarn to use HTTP instead of Git
-        run: yarn config set "git-timeout" 60000 && yarn config set "httpTimeout" 300000
-
-      - name: Cache Yarn modules
+      - name: Cache npm modules
         uses: actions/cache@v2
         with:
-          path: ~/.cache/yarn
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-npm-
 
       - name: Install dependencies
-        run: yarn install
+        run: npm install
         working-directory: ./todomvc
 
       - name: Run build
-        run: yarn build
+        run: npm run build
         working-directory: ./todomvc
 
       - name: Log in to Docker Hub
