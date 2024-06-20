@@ -13,6 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Remove package-lock.json
+        run: rm -f package-lock.json
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '8.17.0'  # 使用与 package.json 中指定的 Node.js 版本
+
       - name: Cache Yarn modules
         uses: actions/cache@v2
         with:
@@ -20,11 +28,6 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
 
       - name: Install dependencies
         run: yarn install
