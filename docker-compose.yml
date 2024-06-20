@@ -1,13 +1,13 @@
-version: '3.8'
-
+version: '3'
 services:
-  website:
-    image: masterhua/my-profile:latest
+  todomvc:
+    image: masterhua/todomvc
+    ports:
+      - "8081:8081"
+    restart: always
+
+  html:
+    image: masterhua/html
     ports:
       - "8080:80"
-
-  todo-app:
-    build:
-      context: ./todomvc
-    ports:
-      - "8081:80"
+    restart: always

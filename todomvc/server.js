@@ -2,13 +2,19 @@
 
 var express = require('express');
 var fs = require('fs');
+var path = require('path');
 var learnJson = require('./learn.json');
 
 var app = module.exports = express();
 var favicon = require('serve-favicon');
 
 app.use(express.static(__dirname));
-app.use(favicon(__dirname + '/site-assets/favicon.ico'));
+app.use(favicon(path.join(__dirname, 'site-assets', 'favicon.ico')));
+
+// Serve the main index.html file
+app.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 Object.defineProperty(module.exports, 'learnJson', {
 	set: function (backend) {
@@ -19,4 +25,12 @@ Object.defineProperty(module.exports, 'learnJson', {
 			}
 		});
 	}
+});
+
+// Define the port
+var PORT = 8081;
+
+// Start the server
+app.listen(PORT, function() {
+  console.log('Server is running on port', PORT);
 });
